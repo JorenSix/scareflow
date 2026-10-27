@@ -1,0 +1,8 @@
+# Copy to ~/.local/share/applications/ and set Exec to the install directory.
+[Desktop Entry]
+Type=Application
+Name=Scareflow
+Comment=Scareflow show node editor
+Exec=/home/USER/scareflow/run.sh
+Terminal=false
+Categories=AudioVideo;

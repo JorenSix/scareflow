@@ -1,0 +1,226 @@
+# Example show for scareflow-showui. Copy to showui.toml; the editor saves back to it.
+# Blocks are [[node]] entries; [[wire]] connects [node id, output pin] to [node id, input pin].
+# Trigger pins carry "something happened", value pins carry a number (e.g. an OSC argument).
+
+[osc]
+listen = "0.0.0.0:9000"
+
+[sound]
+dir = "."                     # sound root, relative to this file
+background_dir = "bg-music"   # offered by Background blocks
+scare_dir = "scare"           # offered by Sound blocks (plus the background folder)
+duck_to = 0.5                 # music drops to 50% while a sound plays
+buffer_frames = 128           # audio latency: smaller is sooner but may crackle; 0 = system default
+
+# Space: scream.
+[[node]]
+id = 1
+pos = [40.0, 40.0]
+block = "key"
+key = "Space"
+
+[[node]]
+id = 2
+pos = [340.0, 40.0]
+block = "sound"
+file = "scare/scream_short.wav"
+volume = 0.9
+
+# Any pumpkin's OSC scare: scream, then after 400 ms WLED lightning and thunder.
+[[node]]
+id = 3
+pos = [40.0, 240.0]
+block = "osc_in"
+address = "/pumpkin/*/scare"
+
+[[node]]
+id = 4
+pos = [340.0, 260.0]
+block = "delay"
+ms = 400
+
+[[node]]
+id = 5
+pos = [600.0, 200.0]
+block = "wled"
+host = "192.168.1.102"
+action = { do = "lightning", duration_ms = 3000 }
+
+[[node]]
+id = 6
+pos = [600.0, 380.0]
+block = "sound"
+file = "scare/thunder_roll.wav"
+volume = 1.0
+
+# Arrows switch the mood, down stops the music; /pumpkin/vol <0..1> sets its volume.
+[[node]]
+id = 7
+pos = [40.0, 560.0]
+block = "key"
+key = "ArrowLeft"
+
+[[node]]
+id = 8
+pos = [40.0, 660.0]
+block = "key"
+key = "ArrowRight"
+
+[[node]]
+id = 9
+pos = [40.0, 760.0]
+block = "key"
+key = "ArrowDown"
+
+[[node]]
+id = 10
+pos = [40.0, 860.0]
+block = "osc_in"
+address = "/pumpkin/vol"
+args = 1
+
+[[node]]
+id = 11
+pos = [340.0, 560.0]
+block = "background"
+file = "bg-music/long_note_four.mp3"
+volume = 0.4
+
+[[node]]
+id = 12
+pos = [340.0, 780.0]
+block = "background"
+file = "bg-music/night_on_bald_mountain_mussorgsky.ogg"
+volume = 0.4
+
+# Key 1: a random howl or scream, at most once every 3 s.
+[[node]]
+id = 13
+pos = [900.0, 40.0]
+block = "key"
+key = "1"
+
+[[node]]
+id = 14
+pos = [1100.0, 40.0]
+block = "cooldown"
+secs = 3.0
+
+[[node]]
+id = 15
+pos = [1300.0, 40.0]
+block = "random"
+outputs = 2
+
+[[node]]
+id = 16
+pos = [1500.0, 0.0]
+block = "sound"
+file = "scare/howl_wolves.wav"
+volume = 1.0
+
+[[node]]
+id = 17
+pos = [1500.0, 180.0]
+block = "sound"
+file = "scare/scream_wilhelm.wav"
+volume = 1.0
+
+# Key 2 or OSC /pumpkin/plug: smart plug (192.168.1.162) on for 1.8 s.
+[[node]]
+id = 18
+pos = [900.0, 420.0]
+block = "key"
+key = "2"
+
+[[node]]
+id = 19
+pos = [900.0, 520.0]
+block = "osc_in"
+address = "/pumpkin/plug"
+
+[[node]]
+id = 20
+pos = [1200.0, 440.0]
+block = "plug"
+host = "192.168.1.162"
+on_ms = 1800
+
+# A clickable button that stops both background loops.
+[[node]]
+id = 21
+pos = [40.0, 980.0]
+block = "button"
+label = "Stop music"
+
+[[wire]]
+from = [1, 0]
+to = [2, 0]
+
+[[wire]]
+from = [3, 0]
+to = [2, 0]
+
+[[wire]]
+from = [3, 0]
+to = [4, 0]
+
+[[wire]]
+from = [4, 0]
+to = [5, 0]
+
+[[wire]]
+from = [4, 0]
+to = [6, 0]
+
+[[wire]]
+from = [7, 0]
+to = [11, 0]
+
+[[wire]]
+from = [8, 0]
+to = [12, 0]
+
+[[wire]]
+from = [9, 0]
+to = [12, 1]
+
+[[wire]]
+from = [10, 1]
+to = [11, 2]
+
+[[wire]]
+from = [10, 1]
+to = [12, 2]
+
+[[wire]]
+from = [13, 0]
+to = [14, 0]
+
+[[wire]]
+from = [14, 0]
+to = [15, 0]
+
+[[wire]]
+from = [15, 0]
+to = [16, 0]
+
+[[wire]]
+from = [15, 1]
+to = [17, 0]
+
+[[wire]]
+from = [18, 0]
+to = [20, 0]
+
+[[wire]]
+from = [19, 0]
+to = [20, 0]
+
+[[wire]]
+from = [21, 0]
+to = [11, 1]
+
+[[wire]]
+from = [21, 0]
+to = [12, 1]

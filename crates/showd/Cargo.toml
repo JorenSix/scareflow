@@ -1,0 +1,14 @@
+[package]
+name = "scareflow-showd"
+description = "Standalone daemon wiring the Scareflow OSC event module to sound and WLED responders"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+env_logger = "0.11"
+log = "0.4"
+scareflow-osc = { path = "../osc" }
+scareflow-sound = { path = "../sound" }
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"

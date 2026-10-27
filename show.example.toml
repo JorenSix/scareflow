@@ -1,0 +1,44 @@
+# Example configuration for scareflow-showd. Copy to show.toml and adjust.
+
+[osc]
+listen = "0.0.0.0:9000"
+# builtin_routes = true   # /pumpkin/sound/play, /pumpkin/lightning, … (see README)
+
+[sound]
+dir = "audio"                 # relative to this file
+background = "ambient.ogg"    # loops from startup; effects play on top
+background_volume = 0.4
+duck_to = 0.5                 # music drops to 50% while an effect plays
+max_voices = 8
+fade_ms = 800
+buffer_frames = 128           # audio latency: smaller is sooner but may crackle; 0 = system default
+
+[wled.porch]
+host = "192.168.1.50"
+
+[osc_out.lights]
+addr = "192.168.1.102:8000"   # OSC-controlled light (port: whatever the device listens on)
+
+# Any pumpkin's scare: scream, WLED preset 3, and a 3 s lightning storm.
+[[route]]
+address = "/pumpkin/*/scare"
+actions = [
+  { type = "sound", cmd = "play", file = "scream.wav", volume = 0.9 },
+  { type = "wled", target = "porch", cmd = "preset", preset = 3 },
+  { type = "osc_out", target = "lights", cmd = "lightning", address = "/light/1", duration_ms = 3000 },
+]
+
+# Thunder with a storm whose length is the first OSC argument (ms).
+[[route]]
+address = "/pumpkin/storm"
+actions = [
+  { type = "sound", cmd = "play", file = "thunder.wav" },
+  { type = "osc_out", target = "lights", cmd = "lightning", address = "/light/1", duration_ms = "$1" },
+]
+
+# Forward a plain value: /pumpkin/dim 0.3 -> /light/1/dimmer 0.3 on the light controller.
+[[route]]
+address = "/pumpkin/dim"
+actions = [
+  { type = "osc_out", target = "lights", cmd = "send", address = "/light/1/dimmer", args = ["$1"] },
+]

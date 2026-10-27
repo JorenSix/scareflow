@@ -1,0 +1,13 @@
+[package]
+name = "scareflow-sound"
+description = "Scareflow sound module: looping background music with one-shot effects on top"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+log = "0.4"
+rodio = { version = "0.23", default-features = false, features = ["playback", "flac", "mp3", "vorbis", "wav"] }
+
+[dev-dependencies]
+hound = "3.5"

@@ -1,0 +1,13 @@
+/target/
+.DS_Store
+
+# Personal show file (device IPs, local paths); showui.example.toml is committed.
+/showui.toml
+/show.toml
+
+# Audio is not distributed with the code; see scare/CREDITS.md and bg-music/CREDITS.md.
+/scare/*
+!/scare/CREDITS.md
+/bg-music/*
+!/bg-music/CREDITS.md
+/audio/

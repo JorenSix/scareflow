@@ -1,0 +1,20 @@
+[package]
+name = "scareflow-osc"
+description = "Scareflow OSC event module: OSC listener, address routing and pluggable responders"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+default = ["wled"]
+wled = ["dep:ureq"]
+
+[dependencies]
+log = "0.4"
+rosc = "0.11"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = { version = "2.12", default-features = false, optional = true }
+
+[dev-dependencies]
+toml = "0.8"
