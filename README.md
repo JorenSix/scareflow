@@ -4,6 +4,8 @@ A node-based show controller for haunted houses, Halloween porches and other sma
 
 Scareflow is a Rust workspace. It runs on macOS and Linux.
 
+![The Scareflow node editor with the example show](docs/screenshot.png)
+
 | Crate | Purpose |
 | --- | --- |
 | `scareflow-showui` | 🎃 The node editor and runtime. Start here. |
