@@ -85,7 +85,7 @@ A 🎃 node editor. **Event** blocks are wired through **flow** blocks to **resp
 | Smart plug (Tasmota): on, then off again after N ms (default 1800) | ▶ on, ▶ off | ▶ switched on, ▶ switched off |
 | OSC out (`ip:port`, address, float args) | ▶ send, ● value (replaces arg1) | — |
 
-- Sound blocks each pick an audio output device. Each device has one background loop.
+- Sound blocks each pick an audio output device. Each device has one background loop. On Linux with PipeWire or PulseAudio running, the list shows the sound server's outputs; without a sound server it shows the ALSA devices.
 - A value updates its setting at once for background volume and WLED brightness. Other settings use the value on the next trigger.
 - Keys work anywhere in the window, except while you type in a text field.
 - The ▶ in an event block's header fires it for testing. Blocks light up when they fire.

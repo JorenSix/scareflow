@@ -9,5 +9,10 @@ license.workspace = true
 log = "0.4"
 rodio = { version = "0.23", default-features = false, features = ["playback", "flac", "mp3", "vorbis", "wav"] }
 
+# Plays through the sound server (PulseAudio, or PipeWire via pipewire-pulse) when one runs,
+# so its outputs can be picked by name while it holds the sound cards open.
+[target.'cfg(target_os = "linux")'.dependencies]
+cpal = { version = "0.18", features = ["pulseaudio"] }
+
 [dev-dependencies]
 hound = "3.5"
